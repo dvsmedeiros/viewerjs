@@ -1,5 +1,5 @@
 {
-  "name": "viewerjs",
+  "name": "viewerjs-compsis",
   "description": "JavaScript image viewer.",
   "version": "1.2.0",
   "main": "dist/viewer.common.js",
