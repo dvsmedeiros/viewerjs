@@ -5,11 +5,16 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-05-27T07:33:11.301Z
+ * Date: 2018-07-04T19:32:43.735Z
  */
 
 .viewer-zoom-in::before,
 .viewer-zoom-out::before,
+.viewer-contrast-in::before,
+.viewer-contrast-out::before,
+.viewer-brightness-in::before,
+.viewer-brightness-out::before,
+.viewer-invert::before,
 .viewer-one-to-one::before,
 .viewer-reset::before,
 .viewer-prev::before,
@@ -40,6 +45,31 @@
 .viewer-zoom-out::before {
   background-position: -20px 0;
   content: 'Zoom Out';
+}
+
+.viewer-contrast-in::before {
+  background-position: 0 0;
+  content: 'Contrast In';
+}
+
+.viewer-contrast-out::before {
+  background-position: -20px 0;
+  content: 'Contrast Out';
+}
+
+.viewer-brightness-in::before {
+  background-position: 0 0;
+  content: 'Brightness In';
+}
+
+.viewer-brightness-out::before {
+  background-position: -20px 0;
+  content: 'Brightness Out';
+}
+
+.viewer-invert::before {
+  background-position: 0 0;
+  content: 'Invert';
 }
 
 .viewer-one-to-one::before {

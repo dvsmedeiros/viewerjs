@@ -13,6 +13,7 @@ import {
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
+  getFilters,
   isFunction,
   isString,
   removeClass,
@@ -217,6 +218,8 @@ export default {
       marginLeft: imageData.left,
       marginTop: imageData.top,
     }, getTransforms(imageData)));
+
+    setStyle(image, getFilters(imageData));
 
     if (done) {
       if ((this.viewing || this.zooming) && this.options.transition) {

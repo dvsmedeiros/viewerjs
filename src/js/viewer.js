@@ -218,7 +218,10 @@ class Viewer {
       const custom = isPlainObject(options.toolbar);
       const zoomButtons = BUTTONS.slice(0, 3);
       const rotateButtons = BUTTONS.slice(7, 9);
-      const scaleButtons = BUTTONS.slice(9);
+      const scaleButtons = BUTTONS.slice(9, 10);
+      const contrast = BUTTONS.slice(10, 12);
+      const brightness = BUTTONS.slice(12, 14);
+      const invert = BUTTONS.slice(14, 16);
 
       if (!custom) {
         addClass(toolbar, getResponsiveClass(options.toolbar));
@@ -233,7 +236,10 @@ class Viewer {
           !show ||
           (!options.zoomable && zoomButtons.indexOf(name) !== -1) ||
           (!options.rotatable && rotateButtons.indexOf(name) !== -1) ||
-          (!options.scalable && scaleButtons.indexOf(name) !== -1)
+          (!options.scalable && scaleButtons.indexOf(name) !== -1) ||
+          (!options.contrast && contrast.indexOf(name) !== -1) ||
+          (!options.brightness && brightness.indexOf(name) !== -1) ||
+          (!options.invert && invert.indexOf(name) !== -1)
         ) {
           return;
         }

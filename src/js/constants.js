@@ -61,4 +61,9 @@ export const BUTTONS = [
   'rotate-right',
   'flip-horizontal',
   'flip-vertical',
+  'contrast-in',
+  'contrast-out',
+  'brightness-in',
+  'brightness-out',
+  'invert',
 ];

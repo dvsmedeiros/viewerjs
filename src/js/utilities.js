@@ -489,6 +489,39 @@ export function getTransforms({
 }
 
 /**
+ * Get filters base on the given object.
+ * @param {Object} obj - The target object.
+ * @returns {string} A string contains transform values.
+ */
+export function getFilters({
+  contrast,
+  brightness,
+  invert,
+}) {
+  const values = [];
+
+  if (isNumber(contrast) && contrast !== 1) {
+    values.push(`contrast(${contrast})`);
+  }
+
+  if (isNumber(brightness) && brightness !== 1) {
+    values.push(`brightness(${brightness})`);
+  }
+
+  if (isNumber(invert) && invert !== 0) {
+    values.push(`invert(${invert})`);
+  }
+
+  const filter = values.length ? values.join(' ') : 'none';
+
+  return {
+    WebkitFilter: filter,
+    msFilter: filter,
+    filter,
+  };
+}
+
+/**
  * Get an image name from an image url.
  * @param {string} url - The target url.
  * @example

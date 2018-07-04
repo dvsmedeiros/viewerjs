@@ -391,6 +391,51 @@ export default {
     return this;
   },
 
+  contrast(ratio) {
+    const MAX_CONSTRAST = 10;
+    const MIN_CONSTRAST = 1;
+
+    const contrastValue = this.imageData.contrast || MIN_CONSTRAST;
+
+    if (isNumber(contrastValue) && this.viewed && !this.played && this.options.contrast) {
+      let calculated = contrastValue + ratio;
+      calculated = calculated > MAX_CONSTRAST ? MAX_CONSTRAST : calculated;
+      calculated = calculated < MIN_CONSTRAST ? MIN_CONSTRAST : calculated;
+      this.imageData.contrast = calculated;
+      this.renderImage();
+    }
+    return this;
+  },
+
+  brightness(ratio) {
+    const MAX_BRIGHTNESS = 10;
+    const MIN_BRIGHTNESS = 1;
+
+    const brightnessValue = this.imageData.brightness || MIN_BRIGHTNESS;
+
+    if (isNumber(brightnessValue) && this.viewed && !this.played && this.options.brightness) {
+      let calculated = brightnessValue + ratio;
+      calculated = calculated > MAX_BRIGHTNESS ? MAX_BRIGHTNESS : calculated;
+      calculated = calculated < MIN_BRIGHTNESS ? MIN_BRIGHTNESS : calculated;
+      this.imageData.brightness = calculated;
+      this.renderImage();
+    }
+    return this;
+  },
+
+  invert() {
+    return this.imageData.invert ? this.invertTo(0) : this.invertTo(2);
+  },
+
+  invertTo(ratio) {
+    const invertValue = ratio; // max value for invert
+    if (isNumber(invertValue) && this.viewed && !this.played && this.options.invert) {
+      this.imageData.invert = invertValue;
+      this.renderImage();
+    }
+    return this;
+  },
+
   /**
    * Zoom the image with a relative ratio.
    * @param {number} ratio - The target ratio.

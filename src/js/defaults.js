@@ -23,6 +23,15 @@ export default {
   // Enable to zoom the image
   zoomable: true,
 
+  // Enable contrast adjust
+  contrast: true,
+
+  // Enable brightness adjust
+  brightness: true,
+
+  // Enable invert adjust
+  invert: true,
+
   // Enable to rotate the image
   rotatable: true,
 

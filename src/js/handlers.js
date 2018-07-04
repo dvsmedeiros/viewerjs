@@ -63,6 +63,26 @@ export default {
         this.zoom(-0.1, true);
         break;
 
+      case 'contrast-in':
+        this.contrast(0.5);
+        break;
+
+      case 'contrast-out':
+        this.contrast(-0.5);
+        break;
+
+      case 'brightness-in':
+        this.brightness(0.5);
+        break;
+
+      case 'brightness-out':
+        this.brightness(-0.5);
+        break;
+
+      case 'invert':
+        this.invert();
+        break;
+
       case 'one-to-one':
         this.toggle();
         break;
@@ -132,6 +152,7 @@ export default {
       `margin-top:${viewerData.height / 2}px;` +
       'max-width:none!important;' +
       'position:absolute;' +
+      'filter: invert(2)' +
       'width:0;'
     );
 

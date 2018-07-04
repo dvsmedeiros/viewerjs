@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-05-27T07:33:19.361Z
+ * Date: 2018-07-04T19:32:51.422Z
  */
 
 'use strict';
@@ -34,6 +34,15 @@ var DEFAULTS = {
 
   // Enable to zoom the image
   zoomable: true,
+
+  // Enable contrast adjust
+  contrast: true,
+
+  // Enable brightness adjust
+  brightness: true,
+
+  // Enable invert adjust
+  invert: true,
 
   // Enable to rotate the image
   rotatable: true,
@@ -160,7 +169,7 @@ var EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll';
 
 // Data keys
 var DATA_ACTION = NAMESPACE + 'Action';
-var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
+var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical', 'contrast-in', 'contrast-out', 'brightness-in', 'brightness-out', 'invert'];
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -693,6 +702,39 @@ function getTransforms(_ref) {
 }
 
 /**
+ * Get filters base on the given object.
+ * @param {Object} obj - The target object.
+ * @returns {string} A string contains transform values.
+ */
+function getFilters(_ref2) {
+  var contrast = _ref2.contrast,
+      brightness = _ref2.brightness,
+      invert = _ref2.invert;
+
+  var values = [];
+
+  if (isNumber(contrast) && contrast !== 1) {
+    values.push('contrast(' + contrast + ')');
+  }
+
+  if (isNumber(brightness) && brightness !== 1) {
+    values.push('brightness(' + brightness + ')');
+  }
+
+  if (isNumber(invert) && invert !== 0) {
+    values.push('invert(' + invert + ')');
+  }
+
+  var filter = values.length ? values.join(' ') : 'none';
+
+  return {
+    WebkitFilter: filter,
+    msFilter: filter,
+    filter: filter
+  };
+}
+
+/**
  * Get an image name from an image url.
  * @param {string} url - The target url.
  * @example
@@ -802,9 +844,9 @@ function getMaxZoomRatio(pointers) {
  * @param {boolean} endOnly - Indicates if only returns the end point coordinate or not.
  * @returns {Object} The result pointer contains start and/or end point coordinates.
  */
-function getPointer(_ref2, endOnly) {
-  var pageX = _ref2.pageX,
-      pageY = _ref2.pageY;
+function getPointer(_ref3, endOnly) {
+  var pageX = _ref3.pageX,
+      pageY = _ref3.pageY;
 
   var end = {
     endX: pageX,
@@ -827,9 +869,9 @@ function getPointersCenter(pointers) {
   var pageY = 0;
   var count = 0;
 
-  forEach(pointers, function (_ref3) {
-    var startX = _ref3.startX,
-        startY = _ref3.startY;
+  forEach(pointers, function (_ref4) {
+    var startX = _ref4.startX,
+        startY = _ref4.startY;
 
     pageX += startX;
     pageY += startY;
@@ -1044,6 +1086,8 @@ var render = {
       marginTop: imageData.top
     }, getTransforms(imageData)));
 
+    setStyle(image, getFilters(imageData));
+
     if (done) {
       if ((this.viewing || this.zooming) && this.options.transition) {
         var onTransitionEnd = function onTransitionEnd() {
@@ -1152,6 +1196,26 @@ var handlers = {
         this.zoom(-0.1, true);
         break;
 
+      case 'contrast-in':
+        this.contrast(0.5);
+        break;
+
+      case 'contrast-out':
+        this.contrast(-0.5);
+        break;
+
+      case 'brightness-in':
+        this.brightness(0.5);
+        break;
+
+      case 'brightness-out':
+        this.brightness(-0.5);
+        break;
+
+      case 'invert':
+        this.invert();
+        break;
+
       case 'one-to-one':
         this.toggle();
         break;
@@ -1215,7 +1279,7 @@ var handlers = {
       removeClass(this.canvas, CLASS_LOADING);
     }
 
-    image.style.cssText = 'height:0;' + ('margin-left:' + viewerData.width / 2 + 'px;') + ('margin-top:' + viewerData.height / 2 + 'px;') + 'max-width:none!important;' + 'position:absolute;' + 'width:0;';
+    image.style.cssText = 'height:0;' + ('margin-left:' + viewerData.width / 2 + 'px;') + ('margin-top:' + viewerData.height / 2 + 'px;') + 'max-width:none!important;' + 'position:absolute;' + 'filter: invert(2)' + 'width:0;';
 
     this.initImage(function () {
       toggleClass(image, CLASS_MOVE, options.movable);
@@ -1869,6 +1933,47 @@ var methods = {
       }
     }
 
+    return this;
+  },
+  contrast: function contrast(ratio) {
+    var MAX_CONSTRAST = 10;
+    var MIN_CONSTRAST = 1;
+
+    var contrastValue = this.imageData.contrast || MIN_CONSTRAST;
+
+    if (isNumber(contrastValue) && this.viewed && !this.played && this.options.contrast) {
+      var calculated = contrastValue + ratio;
+      calculated = calculated > MAX_CONSTRAST ? MAX_CONSTRAST : calculated;
+      calculated = calculated < MIN_CONSTRAST ? MIN_CONSTRAST : calculated;
+      this.imageData.contrast = calculated;
+      this.renderImage();
+    }
+    return this;
+  },
+  brightness: function brightness(ratio) {
+    var MAX_BRIGHTNESS = 10;
+    var MIN_BRIGHTNESS = 1;
+
+    var brightnessValue = this.imageData.brightness || MIN_BRIGHTNESS;
+
+    if (isNumber(brightnessValue) && this.viewed && !this.played && this.options.brightness) {
+      var calculated = brightnessValue + ratio;
+      calculated = calculated > MAX_BRIGHTNESS ? MAX_BRIGHTNESS : calculated;
+      calculated = calculated < MIN_BRIGHTNESS ? MIN_BRIGHTNESS : calculated;
+      this.imageData.brightness = calculated;
+      this.renderImage();
+    }
+    return this;
+  },
+  invert: function invert() {
+    return this.imageData.invert ? this.invertTo(0) : this.invertTo(2);
+  },
+  invertTo: function invertTo(ratio) {
+    var invertValue = ratio; // max value for invert
+    if (isNumber(invertValue) && this.viewed && !this.played && this.options.invert) {
+      this.imageData.invert = invertValue;
+      this.renderImage();
+    }
     return this;
   },
 
@@ -2871,7 +2976,10 @@ var Viewer = function () {
         var custom = isPlainObject(options.toolbar);
         var zoomButtons = BUTTONS.slice(0, 3);
         var rotateButtons = BUTTONS.slice(7, 9);
-        var scaleButtons = BUTTONS.slice(9);
+        var scaleButtons = BUTTONS.slice(9, 10);
+        var contrast = BUTTONS.slice(10, 12);
+        var brightness = BUTTONS.slice(12, 14);
+        var invert = BUTTONS.slice(14, 16);
 
         if (!custom) {
           addClass(toolbar, getResponsiveClass(options.toolbar));
@@ -2882,7 +2990,7 @@ var Viewer = function () {
           var name = custom ? hyphenate(index) : value;
           var show = deep && !isUndefined(value.show) ? value.show : value;
 
-          if (!show || !options.zoomable && zoomButtons.indexOf(name) !== -1 || !options.rotatable && rotateButtons.indexOf(name) !== -1 || !options.scalable && scaleButtons.indexOf(name) !== -1) {
+          if (!show || !options.zoomable && zoomButtons.indexOf(name) !== -1 || !options.rotatable && rotateButtons.indexOf(name) !== -1 || !options.scalable && scaleButtons.indexOf(name) !== -1 || !options.contrast && contrast.indexOf(name) !== -1 || !options.brightness && brightness.indexOf(name) !== -1 || !options.invert && invert.indexOf(name) !== -1) {
             return;
           }
 
