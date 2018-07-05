@@ -37,32 +37,6 @@
   content: 'Zoom Out';
 }
 
-.viewer-contrast-in::before {
-  background-position: 0 0;
-  content: 'Contrast In';
-}
-
-.viewer-contrast-out::before {
-  background-position: -20px 0;
-  content: 'Contrast Out';
-}
-
-.viewer-brightness-in::before {
-  background-position: 0 0;
-  content: 'Brightness In';
-}
-
-.viewer-brightness-out::before {
-  background-position: -20px 0;
-  content: 'Brightness Out';
-}
-
-.viewer-invert::before {
-  background-position: 0 0;
-  content: 'Invert';
-}
-
-
 .viewer-one-to-one::before {
   background-position: -40px 0;
   content: 'One to One';
@@ -121,6 +95,31 @@
 .viewer-close::before {
   background-position: -260px 0;
   content: 'Close';
+}
+
+.viewer-contrast-out::before {
+  background-position: -280px 0;
+  content: 'Contrast Out';
+}
+
+.viewer-contrast-in::before {
+  background-position: -310px 0;
+  content: 'Contrast In';
+}
+
+.viewer-brightness-out::before {
+  background-position: -340px 0;
+  content: 'Brightness Out';
+}
+
+.viewer-brightness-in::before {
+  background-position: -370px 0;
+  content: 'Brightness In';
+}
+
+.viewer-invert::before {
+  background-position: -400px 0;
+  content: 'Invert';
 }
 
 .viewer-container {
